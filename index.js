@@ -149,6 +149,10 @@ class AudioRecorder {
     this.config = { ...AudioDefaultConfig };
     this._state = AudioState.Initial;
     this.lastPreparedPath = null;
+    this.progressSubscription = AudioRecorderEventEmitter.addListener(
+      AudioEvent.Progress,
+      this.recordingData.bind(this)
+    )
     this.errorSubscription = AudioRecorderEventEmitter.addListener(
       AudioEvent.Error,
       this._onError.bind(this)
@@ -374,7 +378,12 @@ class AudioRecorder {
     });
   };
 
+  // progressSubscription = (data) => {
+  //   return data
+  // }
+
   clean = () => {
+    AudioRecorderEventEmitter.removeSubscription(this.progressSubscription)
     AudioRecorderEventEmitter.removeSubscription(this.errorSubscription);
     AudioRecorderEventEmitter.removeSubscription(this.finishSubscription);
     return this.destroy();
@@ -403,6 +412,11 @@ class AudioRecorder {
       });
     }
   };
+
+  recordingData = data => {
+    // console.log(data)
+    return data
+  }
 
   _reset = () => {
     this._state = AudioState.Initial;
