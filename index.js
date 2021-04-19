@@ -149,6 +149,7 @@ class AudioRecorder {
     this.config = { ...AudioDefaultConfig };
     this._state = AudioState.Initial;
     this.lastPreparedPath = null;
+    this.audioRecorderEventEmitter = AudioRecorderEventEmitter;
     this.progressSubscription = AudioRecorderEventEmitter.addListener(
       AudioEvent.Progress,
       this.recordingData.bind(this)
